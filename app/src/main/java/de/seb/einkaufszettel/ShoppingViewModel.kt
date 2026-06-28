@@ -183,6 +183,15 @@ class ShoppingViewModel(application: Application) : AndroidViewModel(application
         }
     }
 
+    fun addCustomCategory(category: String) {
+        val cleaned = category.cleanedText()
+        if (cleaned.isBlank()) return
+        if (DEFAULT_CATEGORIES.any { it.nameKey() == cleaned.nameKey() }) return
+        update {
+            if (customCategories.any { it.nameKey() == cleaned.nameKey() }) this else copy(customCategories = customCategories + cleaned)
+        }
+    }
+
     fun clearCheckedItems() {
         update {
             copy(items = items.filterNot { it.isChecked })

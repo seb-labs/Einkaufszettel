@@ -87,6 +87,7 @@ fun ShoppingScreen(
     onDeleteItem: (Long) -> Unit,
     onDeleteSuggestion: (String) -> Unit,
     onDeleteCategory: (String) -> Unit,
+    onAddCategory: (String) -> Unit,
     onClearCheckedItems: () -> Unit,
     onLoadDemoData: () -> Unit,
     onMoveOpenItem: (Int, Int) -> Unit,
@@ -415,6 +416,7 @@ fun ShoppingScreen(
         CategoryManagerDialog(
             categories = state.customCategories,
             onDeleteCategory = onDeleteCategory,
+            onAddCategory = onAddCategory,
             onDismiss = { showCategoryManagerDialog = false },
         )
     }
@@ -843,11 +845,14 @@ private fun ListEditorDialog(
 private fun CategoryManagerDialog(
     categories: List<String>,
     onDeleteCategory: (String) -> Unit,
+    onAddCategory: (String) -> Unit,
     onDismiss: () -> Unit,
 ) {
     val customCategories = remember(categories) {
         categories.distinctBy { it.nameKey() }.sortedBy { it.lowercase() }
     }
+    var newCategory by remember { mutableStateOf("") }
+    var error by remember { mutableStateOf<String?>(null) }
 
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -855,10 +860,41 @@ private fun CategoryManagerDialog(
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 Text(
-                    text = "Eigene Kategorien kannst du hier wieder entfernen. Standardkategorien bleiben erhalten.",
+                    text = "Eigene Kategorien kannst du hier hinzufügen oder wieder entfernen. Standardkategorien bleiben erhalten.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
+                Row(verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    OutlinedTextField(
+                        value = newCategory,
+                        onValueChange = {
+                            newCategory = it
+                            error = null
+                        },
+                        label = { Text("Neue Kategorie") },
+                        singleLine = true,
+                        modifier = Modifier.weight(1f),
+                    )
+                    Button(onClick = {
+                        val cleaned = newCategory.cleanedText()
+                        if (cleaned.isBlank()) {
+                            error = "Bitte einen Kategoriennamen eingeben."
+                        } else if (DEFAULT_CATEGORIES.any { it.nameKey() == cleaned.nameKey() }) {
+                            error = "Diese Kategorie gibt es schon als Standardkategorie."
+                        } else if (customCategories.any { it.nameKey() == cleaned.nameKey() }) {
+                            error = "Diese Kategorie ist schon vorhanden."
+                        } else {
+                            onAddCategory(cleaned)
+                            newCategory = ""
+                            error = null
+                        }
+                    }) {
+                        Text("Hinzufügen")
+                    }
+                }
+                error?.let {
+                    Text(it, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
+                }
                 if (customCategories.isEmpty()) {
                     Text(
                         text = "Noch keine eigenen Kategorien angelegt.",
