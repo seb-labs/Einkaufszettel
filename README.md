@@ -1,52 +1,60 @@
 # Einkaufszettel
 
-Eine schlichte, lokale Android-App für deinen normalen Wocheneinkauf.
+**Einkaufszettel** ist eine schlichte Android-App für deinen normalen Wocheneinkauf. Du kannst mehrere Listen führen, Artikel schnell hinzufügen, beim Einkaufen abhaken und erledigte Positionen gesammelt aufräumen.
+
+## Warum diese App?
+
+Die App ist bewusst ruhig, kompakt und alltagstauglich gehalten:
+- schnell zu bedienen
+- übersichtlich statt überladen
+- komplett lokal auf dem Gerät
+- ohne Cloud, Login oder Werbung
 
 ## Funktionen
+
 - mehrere Einkaufslisten
 - Standardliste **Wocheneinkauf** beim ersten Start
+- Demo-Daten mit zwei echten Wochenlisten zum direkten Ausprobieren
 - Artikel mit Menge und optionaler Kategorie
-- Abhaken von Artikeln
-- Bearbeiten und Löschen von Artikeln
+- Artikel abhaken, bearbeiten und löschen
 - erledigte Artikel unten anzeigen oder ausblenden
 - erledigte Artikel gesammelt entfernen
 - häufige Artikel als Vorschläge in den Dialogen
-- lokale Speicherung auf dem Gerät
 - helles und dunkles Material-3-Design
 
-## Screens und Navigation
-- **Hauptscreen**: zeigt deine aktuell gewählte Liste, offene Artikel und optional erledigte Artikel
-- **Listen-Auswahl**: über dein Listen-Menü im oberen Bereich
+## So sieht die App aus
+
+- **Hauptscreen**: deine aktuelle Liste mit offenen und optional erledigten Artikeln
+- **Listen-Auswahl**: oben über das Listen-Menü
 - **Dialog „Artikel hinzufügen“**: Name, Menge, Kategorie und Vorschläge
 - **Dialog „Artikel bearbeiten“**: dieselben Felder wie beim Hinzufügen
-- **Menü**: Liste anlegen, umbenennen, löschen, erledigte Artikel ausblenden/anzeigen, erledigte Artikel entfernen, Info
+- **Menü**: Liste anlegen, umbenennen, löschen, erledigte Artikel ein-/ausblenden, erledigte Artikel entfernen, Info
 
-## Technischer Stack
+## Technik
+
 - Kotlin
 - Jetpack Compose
 - Material 3
 - Android Studio Projekt
 - lokale JSON-Persistenz im internen App-Speicher
 
-## Speicherlösung
-Deine Daten werden lokal in einer JSON-Datei im internen Speicher des Geräts gespeichert. Es gibt keine Cloud-Anbindung und keine Anmeldung.
-
 ## Datenschutz
-Du brauchst keine besonderen Berechtigungen, und die App überträgt keine Nutzerdaten an externe Dienste.
+
+Deine Daten bleiben lokal auf dem Gerät. Die App braucht keine besonderen Berechtigungen und überträgt keine Nutzerdaten an externe Dienste.
 
 ## Build
-Führe dafür aus:
+
 ```bash
 ./gradlew assembleDebug
 ```
 
 ## Projektstatus
-- Grundgerüst angelegt
-- Kernfunktionen implementiert
-- Debug-Build und JVM-Tests erfolgreich geprüft
-- passendes grün-natürliches Farbschema und Launcher-Icon gesetzt
-- Demo-Daten für zwei echte Wochen vorgesehen
-- offene Punkte: optionales Feintuning von UI/Layouts nach realem Emulator- oder Gerätecheck
 
-## Hinweis für Android Studio
-Öffne einfach den Ordner `Einkaufszettel` als Projekt. Das Projekt ist als normales Android-Studio-Projekt mit einem App-Modul aufgebaut.
+- Kernfunktionen sind implementiert
+- Debug-Build und JVM-Tests wurden erfolgreich geprüft
+- grün-natürliches Farbschema und passendes Launcher-Icon sind gesetzt
+- Demo-Daten mit zwei Wochenlisten sind eingebaut
+
+## In Android Studio öffnen
+
+Öffne einfach den Ordner `Einkaufszettel` als Projekt. Das ist ein normales Android-Studio-Projekt mit einem App-Modul.
