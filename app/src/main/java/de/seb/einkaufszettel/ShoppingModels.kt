@@ -90,17 +90,25 @@ data class ShoppingData(
 )
 
 fun createDefaultData(now: Long): ShoppingData {
-    val defaultList = ShoppingList(
+    val week1 = ShoppingList(
         id = now,
         name = "Wocheneinkauf",
         createdAt = now,
         updatedAt = now,
         sortOrder = 0,
     )
+    val week2 = ShoppingList(
+        id = now + 100,
+        name = "Nächste Woche",
+        createdAt = now + 100,
+        updatedAt = now + 100,
+        sortOrder = 1,
+    )
+
     val demoItems = listOf(
         ShoppingItem(
             id = now + 1,
-            listId = defaultList.id,
+            listId = week1.id,
             name = "Milch",
             quantity = "2x 1L",
             category = "Kühlung",
@@ -111,7 +119,7 @@ fun createDefaultData(now: Long): ShoppingData {
         ),
         ShoppingItem(
             id = now + 2,
-            listId = defaultList.id,
+            listId = week1.id,
             name = "Brot",
             quantity = "1 Laib",
             category = "Brot & Backwaren",
@@ -122,7 +130,7 @@ fun createDefaultData(now: Long): ShoppingData {
         ),
         ShoppingItem(
             id = now + 3,
-            listId = defaultList.id,
+            listId = week1.id,
             name = "Eier",
             quantity = "10 Stück",
             category = "Kühlung",
@@ -133,7 +141,7 @@ fun createDefaultData(now: Long): ShoppingData {
         ),
         ShoppingItem(
             id = now + 4,
-            listId = defaultList.id,
+            listId = week1.id,
             name = "Bananen",
             quantity = "1 Bund",
             category = "Obst & Gemüse",
@@ -144,7 +152,7 @@ fun createDefaultData(now: Long): ShoppingData {
         ),
         ShoppingItem(
             id = now + 5,
-            listId = defaultList.id,
+            listId = week1.id,
             name = "Haferflocken",
             quantity = "1 Packung",
             category = "Vorrat",
@@ -155,7 +163,7 @@ fun createDefaultData(now: Long): ShoppingData {
         ),
         ShoppingItem(
             id = now + 6,
-            listId = defaultList.id,
+            listId = week1.id,
             name = "Putzmittel",
             quantity = "",
             category = "Drogerie & Haushalt",
@@ -164,16 +172,73 @@ fun createDefaultData(now: Long): ShoppingData {
             updatedAt = now + 6,
             sortOrder = 5,
         ),
+        ShoppingItem(
+            id = now + 101,
+            listId = week2.id,
+            name = "Kaffee",
+            quantity = "1 Packung",
+            category = "Vorrat",
+            isChecked = false,
+            createdAt = now + 101,
+            updatedAt = now + 101,
+            sortOrder = 0,
+        ),
+        ShoppingItem(
+            id = now + 102,
+            listId = week2.id,
+            name = "Joghurt",
+            quantity = "6 Becher",
+            category = "Kühlung",
+            isChecked = false,
+            createdAt = now + 102,
+            updatedAt = now + 102,
+            sortOrder = 1,
+        ),
+        ShoppingItem(
+            id = now + 103,
+            listId = week2.id,
+            name = "Tomaten",
+            quantity = "500 g",
+            category = "Obst & Gemüse",
+            isChecked = false,
+            createdAt = now + 103,
+            updatedAt = now + 103,
+            sortOrder = 2,
+        ),
+        ShoppingItem(
+            id = now + 104,
+            listId = week2.id,
+            name = "Käse",
+            quantity = "1 Stück",
+            category = "Kühlung",
+            isChecked = true,
+            createdAt = now + 104,
+            updatedAt = now + 104,
+            sortOrder = 3,
+        ),
+        ShoppingItem(
+            id = now + 105,
+            listId = week2.id,
+            name = "Müsli",
+            quantity = "1 Packung",
+            category = "Vorrat",
+            isChecked = false,
+            createdAt = now + 105,
+            updatedAt = now + 105,
+            sortOrder = 4,
+        ),
     )
+
     return ShoppingData(
-        lists = listOf(defaultList),
+        lists = listOf(week1, week2),
         items = demoItems,
         frequentItems = listOf(
             FrequentItem("Milch", quantity = "2x 1L", category = "Kühlung", useCount = 4),
             FrequentItem("Brot", quantity = "1 Laib", category = "Brot & Backwaren", useCount = 3),
             FrequentItem("Bananen", quantity = "1 Bund", category = "Obst & Gemüse", useCount = 2),
+            FrequentItem("Kaffee", quantity = "1 Packung", category = "Vorrat", useCount = 2),
         ),
-        selectedListId = defaultList.id,
+        selectedListId = week1.id,
         checkedVisibility = CheckedVisibility.END,
     )
 }

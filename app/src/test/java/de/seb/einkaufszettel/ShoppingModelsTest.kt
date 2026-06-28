@@ -11,12 +11,14 @@ class ShoppingModelsTest {
     }
 
     @Test
-    fun defaultDataCreatesWocheneinkaufList() {
+    fun defaultDataCreatesTwoDemoWeeks() {
         val data = createDefaultData(1234L)
-        assertEquals(1, data.lists.size)
+        assertEquals(2, data.lists.size)
         assertEquals("Wocheneinkauf", data.lists.first().name)
+        assertEquals("Nächste Woche", data.lists[1].name)
         assertEquals(data.lists.first().id, data.selectedListId)
-        assertTrue(data.items.isNotEmpty())
+        assertTrue(data.items.any { it.listId == data.lists.first().id })
+        assertTrue(data.items.any { it.listId == data.lists[1].id })
         assertTrue(data.frequentItems.isNotEmpty())
     }
 

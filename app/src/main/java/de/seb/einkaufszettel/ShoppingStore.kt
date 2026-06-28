@@ -24,7 +24,7 @@ class ShoppingStore(private val file: File) {
             CheckedVisibility.valueOf(parsed.optString(KEY_CHECKED_VISIBILITY, CheckedVisibility.END.name))
         }.getOrDefault(CheckedVisibility.END)
 
-        normalize(
+        val normalized = normalize(
             ShoppingData(
                 lists = lists,
                 items = items,
@@ -33,6 +33,7 @@ class ShoppingStore(private val file: File) {
                 checkedVisibility = visibility,
             ),
         )
+        if (normalized.shouldSeedDemoData()) createDefaultData(currentTimestamp()) else normalized
     }.getOrElse {
         createDefaultData(currentTimestamp())
     }
@@ -57,6 +58,12 @@ class ShoppingStore(private val file: File) {
             checkedVisibility = data.checkedVisibility,
         )
     }
+
+    private fun ShoppingData.shouldSeedDemoData(): Boolean =
+        lists.size == 1 &&
+            items.isEmpty() &&
+            frequentItems.isEmpty() &&
+            lists.firstOrNull()?.name == "Wocheneinkauf"
 
     private fun ShoppingData.toJson(): JSONObject = JSONObject()
         .put(KEY_SELECTED_LIST_ID, selectedListId ?: JSONObject.NULL)

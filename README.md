@@ -45,7 +45,7 @@ Führe dafür aus:
 - Kernfunktionen implementiert
 - Debug-Build und JVM-Tests erfolgreich geprüft
 - passendes grün-natürliches Farbschema und Launcher-Icon gesetzt
-- Demo-Daten für den ersten Start vorgesehen
+- Demo-Daten für zwei echte Wochen vorgesehen
 - offene Punkte: optionales Feintuning von UI/Layouts nach realem Emulator- oder Gerätecheck
 
 ## Hinweis für Android Studio
