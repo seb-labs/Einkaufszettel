@@ -33,7 +33,14 @@ Die App ist bewusst ruhig, kompakt und alltagstauglich gehalten:
 - **Dialog „Artikel bearbeiten“**: dieselben Felder wie beim Hinzufügen
 - **Menü**: Liste anlegen, umbenennen, löschen, erledigte Artikel ein-/ausblenden, erledigte Artikel entfernen, Info
 
-## Technik
+## Screenshots
+
+<p><img src="docs/screenshots/einkaufszettel-start-light.png" width="360" alt="Startscreen hell" /></p>
+<p><img src="docs/screenshots/einkaufszettel-add-dialog-light.png" width="360" alt="Artikel hinzufügen" /></p>
+<p><img src="docs/screenshots/einkaufszettel-list-light.png" width="360" alt="Listenansicht hell" /></p>
+<p><img src="docs/screenshots/einkaufszettel-menu-light.png" width="360" alt="Menü geöffnet" /></p>
+<p><img src="docs/screenshots/einkaufszettel-dark-list.png" width="360" alt="Listenansicht dunkel" /></p>
+
 
 - Kotlin
 - Jetpack Compose
