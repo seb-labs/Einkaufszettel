@@ -1,5 +1,7 @@
 # Einkaufszettel
 
+**Download:** [Aktuelle APK auf GitHub Releases](https://github.com/seb-labs/Einkaufszettel/releases/tag/v1.0.0)
+
 **Einkaufszettel** ist eine schlichte Android-App für deinen normalen Wocheneinkauf. Du kannst mehrere Listen führen, Artikel schnell hinzufügen, beim Einkaufen abhaken und erledigte Positionen gesammelt aufräumen.
 
 ## Warum diese App?
