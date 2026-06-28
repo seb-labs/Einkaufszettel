@@ -2,6 +2,10 @@
 
 **Download:** [Neueste APK auf GitHub Releases](https://github.com/seb-labs/Einkaufszettel/releases/latest)
 
+## Kontakt
+
+einkaufszettel@seblabs.unbox.at
+
 **Einkaufszettel** ist eine schlichte Android-App für deinen normalen Wocheneinkauf. Du kannst mehrere Listen führen, Artikel schnell hinzufügen, beim Einkaufen abhaken und erledigte Positionen gesammelt aufräumen.
 
 ## Warum diese App?
