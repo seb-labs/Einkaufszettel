@@ -832,6 +832,7 @@ private fun ShoppingItemDialog(
     var category by remember(initialCategory) { mutableStateOf(initialCategory) }
     var error by remember { mutableStateOf<String?>(null) }
     var categoryMenuOpen by remember { mutableStateOf(false) }
+    var showMoreSuggestions by remember { mutableStateOf(false) }
 
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -873,9 +874,10 @@ private fun ShoppingItemDialog(
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        suggestions.takeIf { it.isNotEmpty() }?.let { items ->
+                        val visibleSuggestions = if (showMoreSuggestions) suggestions else suggestions.take(3)
+                        if (visibleSuggestions.isNotEmpty()) {
                             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                                items.forEach { suggestion ->
+                                visibleSuggestions.forEach { suggestion ->
                                     SuggestionChip(
                                         onClick = {
                                             name = suggestion.name
@@ -884,6 +886,18 @@ private fun ShoppingItemDialog(
                                             error = null
                                         },
                                         label = { Text(suggestion.name, maxLines = 1, overflow = TextOverflow.Ellipsis) },
+                                    )
+                                }
+                                if (suggestions.size > 3) {
+                                    SuggestionChip(
+                                        onClick = { showMoreSuggestions = !showMoreSuggestions },
+                                        label = {
+                                            Text(
+                                                if (showMoreSuggestions) "Weniger" else "Mehr",
+                                                maxLines = 1,
+                                                overflow = TextOverflow.Ellipsis,
+                                            )
+                                        },
                                     )
                                 }
                             }
