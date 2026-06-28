@@ -15,8 +15,8 @@ Eine schlichte, lokale Android-App für deinen normalen Wocheneinkauf.
 - helles und dunkles Material-3-Design
 
 ## Screens und Navigation
-- **Hauptscreen**: zeigt die aktuell gewählte Liste, offene Artikel und optional erledigte Artikel
-- **Listen-Auswahl**: über das Listen-Menü im oberen Bereich
+- **Hauptscreen**: zeigt deine aktuell gewählte Liste, offene Artikel und optional erledigte Artikel
+- **Listen-Auswahl**: über dein Listen-Menü im oberen Bereich
 - **Dialog „Artikel hinzufügen“**: Name, Menge, Kategorie und Vorschläge
 - **Dialog „Artikel bearbeiten“**: dieselben Felder wie beim Hinzufügen
 - **Menü**: Liste anlegen, umbenennen, löschen, erledigte Artikel ausblenden/anzeigen, erledigte Artikel entfernen, Info
@@ -43,7 +43,8 @@ Die App benötigt keine besonderen Berechtigungen und überträgt keine Nutzerda
 - Grundgerüst angelegt
 - Kernfunktionen implementiert
 - Debug-Build und JVM-Tests erfolgreich geprüft
+- passendes grün-natürliches Farbschema und Launcher-Icon gesetzt
 - offene Punkte: optionales Feintuning von UI/Layouts nach realem Emulator- oder Gerätecheck
 
 ## Hinweis für Android Studio
-Einfach den Ordner `Einkaufszettel` als Projekt öffnen. Das Projekt ist als normales Android-Studio-Projekt mit einem App-Modul aufgebaut.
+Öffne einfach den Ordner `Einkaufszettel` als Projekt. Das Projekt ist als normales Android-Studio-Projekt mit einem App-Modul aufgebaut.
