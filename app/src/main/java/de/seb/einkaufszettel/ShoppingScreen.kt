@@ -211,8 +211,8 @@ fun ShoppingScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .padding(horizontal = 14.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp),
+                .padding(horizontal = 12.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             ListSummaryCard(
                 state = state,
@@ -423,15 +423,15 @@ private fun ListSummaryCard(
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(22.dp),
+        shape = RoundedCornerShape(18.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
     ) {
-        Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+        Column(modifier = Modifier.padding(10.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Box(
                     modifier = Modifier
-                        .size(40.dp)
-                        .clip(RoundedCornerShape(14.dp))
+                        .size(32.dp)
+                        .clip(RoundedCornerShape(12.dp))
                         .background(MaterialTheme.colorScheme.primary),
                     contentAlignment = Alignment.Center,
                 ) {
@@ -439,29 +439,32 @@ private fun ListSummaryCard(
                         Icons.Default.ShoppingCart,
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.onPrimary,
+                        modifier = Modifier.size(18.dp),
                     )
                 }
-                Spacer(modifier = Modifier.width(12.dp))
+                Spacer(modifier = Modifier.width(10.dp))
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
                         text = state.selectedListName.ifBlank { "Einkaufslisten" },
-                        style = MaterialTheme.typography.titleMedium,
+                        style = MaterialTheme.typography.titleSmall,
                         fontWeight = FontWeight.SemiBold,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
                     )
                     Text(
                         text = "${state.lists.size} Listen · ${state.currentItemCount} Artikel",
-                        style = MaterialTheme.typography.bodySmall,
+                        style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onPrimaryContainer,
                     )
                 }
-                IconButton(onClick = onClick) {
+                IconButton(onClick = onClick, modifier = Modifier.size(28.dp)) {
                     Icon(Icons.Default.ArrowDropDown, contentDescription = "Liste auswählen")
                 }
             }
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                 SuggestionChip(
                     onClick = onClick,
-                    label = { Text("Liste wechseln") },
+                    label = { Text("Wechseln") },
                 )
                 SuggestionChip(
                     onClick = onClick,
@@ -682,18 +685,18 @@ private fun ThemeToggleCard(
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(18.dp),
+        shape = RoundedCornerShape(14.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.55f)),
     ) {
         Row(
-            modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
+            modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Column(modifier = Modifier.weight(1f)) {
-                Text("Dunkles Design", style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Medium)
+                Text("Dunkles Design", style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Medium)
                 Text(
                     text = if (darkTheme) "Ein" else "Aus",
-                    style = MaterialTheme.typography.bodySmall,
+                    style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
