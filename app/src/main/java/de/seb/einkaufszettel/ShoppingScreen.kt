@@ -815,6 +815,7 @@ private fun ListEditorDialog(
     )
 }
 
+@OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class, androidx.compose.foundation.layout.ExperimentalLayoutApi::class)
 @Composable
 private fun ShoppingItemDialog(
     title: String,
@@ -856,70 +857,65 @@ private fun ShoppingItemDialog(
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth(),
                 )
-                Box {
-                    OutlinedTextField(
-                        value = category,
-                        onValueChange = { category = it },
-                        label = { Text("Kategorie (optional)") },
-                        singleLine = true,
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                    )
-                    // The text field itself stays editable; the dropdown below offers fast picks.
-                }
+                OutlinedTextField(
+                    value = category,
+                    onValueChange = { category = it },
+                    label = { Text("Kategorie (optional)") },
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth(),
+                )
                 if (categoryOptions.isNotEmpty()) {
                     Text(
                         text = "Vorschläge",
                         style = MaterialTheme.typography.labelMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
-                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    androidx.compose.foundation.layout.FlowRow(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                    ) {
                         val visibleSuggestions = if (showMoreSuggestions) suggestions else suggestions.take(3)
-                        if (visibleSuggestions.isNotEmpty()) {
-                            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                                visibleSuggestions.forEach { suggestion ->
-                                    SuggestionChip(
-                                        onClick = {
-                                            name = suggestion.name
-                                            quantity = suggestion.quantity
-                                            category = suggestion.category
-                                            error = null
-                                        },
-                                        label = { Text(suggestion.name, maxLines = 1, overflow = TextOverflow.Ellipsis) },
-                                    )
-                                }
-                                if (suggestions.size > 3) {
-                                    SuggestionChip(
-                                        onClick = { showMoreSuggestions = !showMoreSuggestions },
-                                        label = {
-                                            Text(
-                                                if (showMoreSuggestions) {
-                                                    "Weniger"
-                                                } else {
-                                                    "Mehr +${suggestions.size - 3}"
-                                                },
-                                                maxLines = 1,
-                                                overflow = TextOverflow.Ellipsis,
-                                            )
-                                        },
-                                    )
-                                }
-                            }
+                        visibleSuggestions.forEach { suggestion ->
+                            SuggestionChip(
+                                onClick = {
+                                    name = suggestion.name
+                                    quantity = suggestion.quantity
+                                    category = suggestion.category
+                                    error = null
+                                },
+                                label = { Text(suggestion.name, maxLines = 1, overflow = TextOverflow.Ellipsis) },
+                            )
                         }
-                        Box {
-                            TextButton(onClick = { categoryMenuOpen = true }) {
-                                Text(if (category.isBlank()) "Kategorie wählen" else "Kategorie ändern")
-                            }
-                            DropdownMenu(expanded = categoryMenuOpen, onDismissRequest = { categoryMenuOpen = false }) {
-                                categoryOptions.forEach { item ->
-                                    DropdownMenuItem(
-                                        text = { Text(item) },
-                                        onClick = {
-                                            category = item
-                                            categoryMenuOpen = false
+                        if (suggestions.size > 3) {
+                            SuggestionChip(
+                                onClick = { showMoreSuggestions = !showMoreSuggestions },
+                                label = {
+                                    Text(
+                                        if (showMoreSuggestions) {
+                                            "Weniger"
+                                        } else {
+                                            "Mehr +${suggestions.size - 3}"
                                         },
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis,
                                     )
-                                }
+                                },
+                            )
+                        }
+                    }
+                    Box {
+                        TextButton(onClick = { categoryMenuOpen = true }) {
+                            Text(if (category.isBlank()) "Kategorie wählen" else "Kategorie ändern")
+                        }
+                        DropdownMenu(expanded = categoryMenuOpen, onDismissRequest = { categoryMenuOpen = false }) {
+                            categoryOptions.forEach { item ->
+                                DropdownMenuItem(
+                                    text = { Text(item) },
+                                    onClick = {
+                                        category = item
+                                        categoryMenuOpen = false
+                                    },
+                                )
                             }
                         }
                     }
