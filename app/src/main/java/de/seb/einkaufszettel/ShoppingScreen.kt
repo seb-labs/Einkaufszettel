@@ -49,6 +49,8 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.SuggestionChip
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
@@ -76,7 +78,6 @@ import kotlin.math.roundToInt
 fun ShoppingScreen(
     state: ShoppingAppState,
     onSelectList: (Long) -> Unit,
-    onSetCheckedVisibility: (CheckedVisibility) -> Unit,
     onSetDarkThemeEnabled: (Boolean) -> Unit,
     onAddList: (String) -> Unit,
     onRenameList: (String) -> Unit,
@@ -102,6 +103,7 @@ fun ShoppingScreen(
     var showLoadDemoConfirm by remember { mutableStateOf(false) }
     var showCategoryManagerDialog by remember { mutableStateOf(false) }
     var showAddItemDialog by remember { mutableStateOf(false) }
+    var selectedSection by remember { mutableStateOf(ListSection.OPEN) }
     var editItem by remember { mutableStateOf<ShoppingItem?>(null) }
 
     val openListState = rememberLazyListState()
@@ -146,27 +148,6 @@ fun ShoppingScreen(
                             onClick = {
                                 showMenu = false
                                 showDeleteListConfirm = true
-                            },
-                        )
-                        DropdownMenuItem(
-                            text = {
-                                Text(
-                                    if (state.checkedVisibility == CheckedVisibility.END) {
-                                        "Erledigte ausblenden"
-                                    } else {
-                                        "Erledigte unten anzeigen"
-                                    },
-                                )
-                            },
-                            onClick = {
-                                showMenu = false
-                                onSetCheckedVisibility(
-                                    if (state.checkedVisibility == CheckedVisibility.END) {
-                                        CheckedVisibility.HIDDEN
-                                    } else {
-                                        CheckedVisibility.END
-                                    },
-                                )
                             },
                         )
                         DropdownMenuItem(
@@ -246,6 +227,8 @@ fun ShoppingScreen(
         ) {
             ListSummaryCard(
                 state = state,
+                selectedSection = selectedSection,
+                onSectionSelected = { selectedSection = it },
                 onClick = { showListMenu = true },
             )
             DropdownMenu(expanded = showListMenu, onDismissRequest = { showListMenu = false }) {
@@ -268,46 +251,42 @@ fun ShoppingScreen(
                     onAction = { showAddListDialog = true },
                 )
             } else {
-                if (state.currentItemCount == 0) {
-                    EmptyStateCard(
-                        title = "Noch keine Artikel",
-                        description = "Füge oben direkt den ersten Einkauf hinzu.",
-                        actionLabel = "Artikel hinzufügen",
-                        onAction = { showAddItemDialog = true },
-                    )
-                } else {
-                    if (state.openItems.isNotEmpty()) {
-                        SectionHeader(
-                            title = "Offen",
-                            subtitle = "${state.openCount} Positionen",
-                        )
-                        OpenItemList(
-                            items = state.openItems,
-                            listState = openListState,
-                            onMoveOpenItem = onMoveOpenItem,
-                            onToggleItem = onToggleItem,
-                            onEditItem = { editItem = it },
-                            onDeleteItem = onDeleteItem,
-                        )
+                when (selectedSection) {
+                    ListSection.OPEN -> {
+                        if (state.openItems.isEmpty()) {
+                            EmptyStateCard(
+                                title = "Noch keine offenen Artikel",
+                                description = "Füge oben direkt den ersten Einkauf hinzu.",
+                                actionLabel = "Artikel hinzufügen",
+                                onAction = { showAddItemDialog = true },
+                            )
+                        } else {
+                            OpenItemList(
+                                items = state.openItems,
+                                listState = openListState,
+                                onMoveOpenItem = onMoveOpenItem,
+                                onToggleItem = onToggleItem,
+                                onEditItem = { editItem = it },
+                                onDeleteItem = onDeleteItem,
+                            )
+                        }
                     }
-
-                    if (state.checkedVisibility == CheckedVisibility.END && state.checkedItems.isNotEmpty()) {
-                        SectionHeader(
-                            title = "Erledigt",
-                            subtitle = "${state.checkedCount} Positionen",
-                        )
-                        CheckedItemList(
-                            items = state.checkedItems,
-                            onToggleItem = onToggleItem,
-                            onEditItem = { editItem = it },
-                            onDeleteItem = onDeleteItem,
-                        )
-                    }
-
-                    if (state.checkedVisibility == CheckedVisibility.HIDDEN && state.checkedItems.isNotEmpty()) {
-                        CompactHintCard(
-                            text = "Erledigte Artikel sind ausgeblendet.",
-                        )
+                    ListSection.DONE -> {
+                        if (state.checkedItems.isEmpty()) {
+                            EmptyStateCard(
+                                title = "Noch nichts erledigt",
+                                description = "Sobald du Artikel abhaktst, tauchen sie hier auf.",
+                                actionLabel = "Zum offenen Tab",
+                                onAction = { selectedSection = ListSection.OPEN },
+                            )
+                        } else {
+                            CheckedItemList(
+                                items = state.checkedItems,
+                                onToggleItem = onToggleItem,
+                                onEditItem = { editItem = it },
+                                onDeleteItem = onDeleteItem,
+                            )
+                        }
                     }
                 }
             }
@@ -455,9 +434,16 @@ fun ShoppingScreen(
     }
 }
 
+private enum class ListSection {
+    OPEN,
+    DONE,
+}
+
 @Composable
 private fun ListSummaryCard(
     state: ShoppingAppState,
+    selectedSection: ListSection,
+    onSectionSelected: (ListSection) -> Unit,
     onClick: () -> Unit,
 ) {
     Card(
@@ -500,18 +486,21 @@ private fun ListSummaryCard(
                     Icon(Icons.Default.ArrowDropDown, contentDescription = "Liste auswählen")
                 }
             }
-            Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                SuggestionChip(
-                    onClick = onClick,
-                    label = { Text("Wechseln") },
+            TabRow(
+                selectedTabIndex = selectedSection.ordinal,
+                containerColor = Color.Transparent,
+                contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                divider = {},
+            ) {
+                Tab(
+                    selected = selectedSection == ListSection.OPEN,
+                    onClick = { onSectionSelected(ListSection.OPEN) },
+                    text = { Text("Offen (${state.openCount})", maxLines = 1) },
                 )
-                SuggestionChip(
-                    onClick = onClick,
-                    label = { Text("${state.openCount} offen") },
-                )
-                SuggestionChip(
-                    onClick = onClick,
-                    label = { Text("${state.checkedCount} erledigt") },
+                Tab(
+                    selected = selectedSection == ListSection.DONE,
+                    onClick = { onSectionSelected(ListSection.DONE) },
+                    text = { Text("Erledigt (${state.checkedCount})", maxLines = 1) },
                 )
             }
         }

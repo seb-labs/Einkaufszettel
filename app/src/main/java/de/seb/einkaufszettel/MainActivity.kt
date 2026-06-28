@@ -27,7 +27,6 @@ fun EinkaufszettelApp(viewModel: ShoppingViewModel = viewModel()) {
             ShoppingScreen(
                 state = viewModel.state,
                 onSelectList = viewModel::selectList,
-                onSetCheckedVisibility = viewModel::setCheckedVisibility,
                 onSetDarkThemeEnabled = viewModel::setDarkThemeEnabled,
                 onAddList = viewModel::addList,
                 onRenameList = viewModel::renameSelectedList,

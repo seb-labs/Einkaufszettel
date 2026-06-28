@@ -22,7 +22,7 @@ Die App ist bewusst ruhig, kompakt und alltagstauglich gehalten:
 - Artikel mit Menge und optionaler Kategorie, kompakt dargestellt; eigene Kategorien werden gelernt und später wieder angeboten; die offene Liste wird automatisch nach Kategorie gruppiert; angelegte Kategorien lassen sich wieder löschen
 - Vorschläge im Artikeldialog lassen sich mit einem "Mehr"-Chip aufklappen
 - Artikel abhaken, bearbeiten und löschen
-- erledigte Artikel unten anzeigen oder ausblenden
+- offene und erledigte Artikel sind jetzt als Tabs im grünen Kopfbereich getrennt
 - erledigte Artikel gesammelt entfernen
 - häufige Artikel als Vorschläge in den Dialogen; überzählige Vorschläge lassen sich aus dem "Mehr"-Bereich entfernen
 - helles und dunkles Material-3-Design mit Umschaltung im Drei-Punkte-Menü
@@ -34,7 +34,7 @@ Die App ist bewusst ruhig, kompakt und alltagstauglich gehalten:
 - **Listen-Auswahl**: oben über das Listen-Menü
 - **Dialog „Artikel hinzufügen“**: Name, Menge, Kategorie und Vorschläge
 - **Dialog „Artikel bearbeiten“**: dieselben Felder wie beim Hinzufügen
-- **Menü**: Liste anlegen, umbenennen, löschen, erledigte Artikel ein-/ausblenden, erledigte Artikel entfernen, Info
+- **Menü**: Liste anlegen, umbenennen, löschen, erledigte Artikel entfernen, Info
 
 ## Screenshots
 
