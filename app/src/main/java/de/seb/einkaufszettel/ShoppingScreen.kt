@@ -172,6 +172,21 @@ fun ShoppingScreen(
                             },
                         )
                         DropdownMenuItem(
+                            text = {
+                                Text(
+                                    if (state.darkThemeEnabled == true) {
+                                        "Helles Design aktivieren"
+                                    } else {
+                                        "Dunkles Design aktivieren"
+                                    },
+                                )
+                            },
+                            onClick = {
+                                showMenu = false
+                                onSetDarkThemeEnabled(state.darkThemeEnabled != true)
+                            },
+                        )
+                        DropdownMenuItem(
                             text = { Text("Demo-Daten laden") },
                             leadingIcon = { Icon(Icons.Default.ShoppingCart, contentDescription = null) },
                             onClick = {
@@ -217,10 +232,6 @@ fun ShoppingScreen(
             ListSummaryCard(
                 state = state,
                 onClick = { showListMenu = true },
-            )
-            ThemeToggleCard(
-                darkTheme = state.darkThemeEnabled == true,
-                onToggle = onSetDarkThemeEnabled,
             )
             DropdownMenu(expanded = showListMenu, onDismissRequest = { showListMenu = false }) {
                 state.lists.forEach { list ->
@@ -674,36 +685,6 @@ private fun ShoppingItemCard(
             IconButton(onClick = { onDelete(item.id) }, modifier = Modifier.size(28.dp)) {
                 Icon(Icons.Default.Delete, contentDescription = "Löschen", modifier = Modifier.size(16.dp))
             }
-        }
-    }
-}
-
-@Composable
-private fun ThemeToggleCard(
-    darkTheme: Boolean,
-    onToggle: (Boolean) -> Unit,
-) {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(14.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.55f)),
-    ) {
-        Row(
-            modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Column(modifier = Modifier.weight(1f)) {
-                Text("Dunkles Design", style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Medium)
-                Text(
-                    text = if (darkTheme) "Ein" else "Aus",
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            }
-            androidx.compose.material3.Switch(
-                checked = darkTheme,
-                onCheckedChange = onToggle,
-            )
         }
     }
 }

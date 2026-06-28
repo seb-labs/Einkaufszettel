@@ -22,7 +22,7 @@ Die App ist bewusst ruhig, kompakt und alltagstauglich gehalten:
 - erledigte Artikel unten anzeigen oder ausblenden
 - erledigte Artikel gesammelt entfernen
 - häufige Artikel als Vorschläge in den Dialogen
-- helles und dunkles Material-3-Design mit Schalter in der App
+- helles und dunkles Material-3-Design mit Umschaltung im Drei-Punkte-Menü
 
 ## So sieht die App aus
 
