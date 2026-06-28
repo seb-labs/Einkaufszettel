@@ -16,6 +16,7 @@ Die App ist bewusst ruhig, kompakt und alltagstauglich gehalten:
 - Standardliste **Wocheneinkauf** beim ersten Start
 - Demo-Daten mit zwei echten Wochenlisten zum direkten Ausprobieren
 - falls du noch eine alte leere App-Datenbank hast, wird sie beim Start automatisch durch die Demo ersetzt
+- im Menü kannst du die Demo-Daten jederzeit manuell laden
 - Artikel mit Menge und optionaler Kategorie
 - Artikel abhaken, bearbeiten und löschen
 - erledigte Artikel unten anzeigen oder ausblenden
@@ -54,7 +55,7 @@ Deine Daten bleiben lokal auf dem Gerät. Die App braucht keine besonderen Berec
 - Kernfunktionen sind implementiert
 - Debug-Build und JVM-Tests wurden erfolgreich geprüft
 - grün-natürliches Farbschema und passendes Launcher-Icon sind gesetzt
-- Demo-Daten mit zwei Wochenlisten sind eingebaut
+- Demo-Daten mit zwei Wochenlisten sind eingebaut und per Menü neu ladbar
 
 ## In Android Studio öffnen
 

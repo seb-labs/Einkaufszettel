@@ -149,6 +149,12 @@ class ShoppingViewModel(application: Application) : AndroidViewModel(application
         }
     }
 
+    fun loadDemoData() {
+        val demo = createDefaultData(currentTimestamp())
+        state = demo.asState()
+        persist(demo.asState())
+    }
+
     fun moveOpenItem(fromIndex: Int, toIndex: Int) {
         val listId = state.selectedListId ?: return
         val openItems = state.items.filter { it.listId == listId && !it.isChecked }.sortedWith(compareBy<ShoppingItem> { it.sortOrder }.thenBy { it.createdAt })

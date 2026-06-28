@@ -83,6 +83,7 @@ fun ShoppingScreen(
     onToggleItem: (Long) -> Unit,
     onDeleteItem: (Long) -> Unit,
     onClearCheckedItems: () -> Unit,
+    onLoadDemoData: () -> Unit,
     onMoveOpenItem: (Int, Int) -> Unit,
 ) {
     var showMenu by remember { mutableStateOf(false) }
@@ -92,6 +93,7 @@ fun ShoppingScreen(
     var showDeleteListConfirm by remember { mutableStateOf(false) }
     var showClearCheckedConfirm by remember { mutableStateOf(false) }
     var showInfoDialog by remember { mutableStateOf(false) }
+    var showLoadDemoConfirm by remember { mutableStateOf(false) }
     var showAddItemDialog by remember { mutableStateOf(false) }
     var editItem by remember { mutableStateOf<ShoppingItem?>(null) }
 
@@ -166,6 +168,14 @@ fun ShoppingScreen(
                             onClick = {
                                 showMenu = false
                                 showClearCheckedConfirm = true
+                            },
+                        )
+                        DropdownMenuItem(
+                            text = { Text("Demo-Daten laden") },
+                            leadingIcon = { Icon(Icons.Default.ShoppingCart, contentDescription = null) },
+                            onClick = {
+                                showMenu = false
+                                showLoadDemoConfirm = true
                             },
                         )
                         DropdownMenuItem(
@@ -348,6 +358,25 @@ fun ShoppingScreen(
             },
             confirmButton = {
                 TextButton(onClick = { showInfoDialog = false }) { Text("OK") }
+            },
+        )
+    }
+
+    if (showLoadDemoConfirm) {
+        AlertDialog(
+            onDismissRequest = { showLoadDemoConfirm = false },
+            title = { Text("Demo-Daten laden?") },
+            text = { Text("Dabei werden deine aktuellen lokalen Daten durch die Demo-Wochen ersetzt.") },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        onLoadDemoData()
+                        showLoadDemoConfirm = false
+                    },
+                ) { Text("Laden") }
+            },
+            dismissButton = {
+                TextButton(onClick = { showLoadDemoConfirm = false }) { Text("Abbrechen") }
             },
         )
     }
