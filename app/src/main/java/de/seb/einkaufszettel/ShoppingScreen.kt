@@ -20,6 +20,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -221,8 +222,7 @@ fun ShoppingScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .padding(horizontal = 12.dp)
-                .verticalScroll(rememberScrollState()),
+                .padding(horizontal = 12.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             ListSummaryCard(
@@ -243,49 +243,51 @@ fun ShoppingScreen(
                 }
             }
 
-            if (state.selectedList == null) {
-                EmptyStateCard(
-                    title = "Keine Liste verfügbar",
-                    description = "Lege eine neue Liste an, damit du direkt loslegen kannst.",
-                    actionLabel = "Liste anlegen",
-                    onAction = { showAddListDialog = true },
-                )
-            } else {
-                when (selectedSection) {
-                    ListSection.OPEN -> {
-                        if (state.openItems.isEmpty()) {
-                            EmptyStateCard(
-                                title = "Noch keine offenen Artikel",
-                                description = "Füge oben direkt den ersten Einkauf hinzu.",
-                                actionLabel = "Artikel hinzufügen",
-                                onAction = { showAddItemDialog = true },
-                            )
-                        } else {
-                            OpenItemList(
-                                items = state.openItems,
-                                listState = openListState,
-                                onMoveOpenItem = onMoveOpenItem,
-                                onToggleItem = onToggleItem,
-                                onEditItem = { editItem = it },
-                                onDeleteItem = onDeleteItem,
-                            )
+            Box(modifier = Modifier.fillMaxSize()) {
+                if (state.selectedList == null) {
+                    EmptyStateCard(
+                        title = "Keine Liste verfügbar",
+                        description = "Lege eine neue Liste an, damit du direkt loslegen kannst.",
+                        actionLabel = "Liste anlegen",
+                        onAction = { showAddListDialog = true },
+                    )
+                } else {
+                    when (selectedSection) {
+                        ListSection.OPEN -> {
+                            if (state.openItems.isEmpty()) {
+                                EmptyStateCard(
+                                    title = "Noch keine offenen Artikel",
+                                    description = "Füge oben direkt den ersten Einkauf hinzu.",
+                                    actionLabel = "Artikel hinzufügen",
+                                    onAction = { showAddItemDialog = true },
+                                )
+                            } else {
+                                OpenItemList(
+                                    items = state.openItems,
+                                    listState = openListState,
+                                    onMoveOpenItem = onMoveOpenItem,
+                                    onToggleItem = onToggleItem,
+                                    onEditItem = { editItem = it },
+                                    onDeleteItem = onDeleteItem,
+                                )
+                            }
                         }
-                    }
-                    ListSection.DONE -> {
-                        if (state.checkedItems.isEmpty()) {
-                            EmptyStateCard(
-                                title = "Noch nichts erledigt",
-                                description = "Sobald du Artikel abhaktst, tauchen sie hier auf.",
-                                actionLabel = "Zum offenen Tab",
-                                onAction = { selectedSection = ListSection.OPEN },
-                            )
-                        } else {
-                            CheckedItemList(
-                                items = state.checkedItems,
-                                onToggleItem = onToggleItem,
-                                onEditItem = { editItem = it },
-                                onDeleteItem = onDeleteItem,
-                            )
+                        ListSection.DONE -> {
+                            if (state.checkedItems.isEmpty()) {
+                                EmptyStateCard(
+                                    title = "Noch nichts erledigt",
+                                    description = "Sobald du Artikel abhaktst, tauchen sie hier auf.",
+                                    actionLabel = "Zum offenen Tab",
+                                    onAction = { selectedSection = ListSection.OPEN },
+                                )
+                            } else {
+                                CheckedItemList(
+                                    items = state.checkedItems,
+                                    onToggleItem = onToggleItem,
+                                    onEditItem = { editItem = it },
+                                    onDeleteItem = onDeleteItem,
+                                )
+                            }
                         }
                     }
                 }
@@ -564,7 +566,7 @@ private fun OpenItemList(
 
     LazyColumn(
         state = listState,
-        modifier = Modifier.fillMaxWidth().heightIn(max = 420.dp),
+        modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(6.dp),
         contentPadding = PaddingValues(bottom = 2.dp),
     ) {
@@ -629,8 +631,8 @@ private fun CheckedItemList(
     onEditItem: (ShoppingItem) -> Unit,
     onDeleteItem: (Long) -> Unit,
 ) {
-    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-        items.forEach { item ->
+    LazyColumn(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+        items(items) { item ->
             ShoppingItemCard(
                 item = item,
                 checked = true,
