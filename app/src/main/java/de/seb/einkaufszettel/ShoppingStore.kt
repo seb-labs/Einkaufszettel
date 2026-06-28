@@ -60,10 +60,9 @@ class ShoppingStore(private val file: File) {
     }
 
     private fun ShoppingData.shouldSeedDemoData(): Boolean =
-        lists.size == 1 &&
+        lists.size <= 1 &&
             items.isEmpty() &&
-            frequentItems.isEmpty() &&
-            lists.firstOrNull()?.name == "Wocheneinkauf"
+            frequentItems.isEmpty()
 
     private fun ShoppingData.toJson(): JSONObject = JSONObject()
         .put(KEY_SELECTED_LIST_ID, selectedListId ?: JSONObject.NULL)

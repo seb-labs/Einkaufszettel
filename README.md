@@ -15,6 +15,7 @@ Die App ist bewusst ruhig, kompakt und alltagstauglich gehalten:
 - mehrere Einkaufslisten
 - Standardliste **Wocheneinkauf** beim ersten Start
 - Demo-Daten mit zwei echten Wochenlisten zum direkten Ausprobieren
+- falls du noch eine alte leere App-Datenbank hast, wird sie beim Start automatisch durch die Demo ersetzt
 - Artikel mit Menge und optionaler Kategorie
 - Artikel abhaken, bearbeiten und löschen
 - erledigte Artikel unten anzeigen oder ausblenden
