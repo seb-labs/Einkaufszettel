@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="shopping_primary">#2F7D32</color>
+    <color name="shopping_primary">#4C8C4A</color>
     <color name="shopping_on_primary">#FFFFFF</color>
-    <color name="shopping_primary_container">#DDF2DE</color>
-    <color name="shopping_on_primary_container">#0E3010</color>
-    <color name="shopping_secondary">#5160B9</color>
-    <color name="shopping_background">#F6F8F4</color>
+    <color name="shopping_primary_container">#DDF3D8</color>
+    <color name="shopping_on_primary_container">#173D17</color>
+    <color name="shopping_secondary">#6C8A5B</color>
+    <color name="shopping_background">#F8FBF5</color>
     <color name="shopping_surface">#FFFFFF</color>
-    <color name="shopping_surface_variant">#E8EEE2</color>
-    <color name="shopping_outline">#C9D4C3</color>
+    <color name="shopping_surface_variant">#E4EDE0</color>
+    <color name="shopping_outline">#C7D3C1</color>
 </resources>

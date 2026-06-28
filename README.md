@@ -1,6 +1,6 @@
 # Einkaufszettel
 
-Eine schlichte, lokale Android-App für den normalen Wocheneinkauf.
+Eine schlichte, lokale Android-App für deinen normalen Wocheneinkauf.
 
 ## Funktionen
 - mehrere Einkaufslisten

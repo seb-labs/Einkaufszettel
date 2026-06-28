@@ -24,18 +24,18 @@ private val LightColorScheme = lightColorScheme(
 private val DarkColorScheme = darkColorScheme(
     primary = Primary,
     onPrimary = androidx.compose.ui.graphics.Color.White,
-    primaryContainer = PrimaryContainer,
-    onPrimaryContainer = OnPrimaryContainer,
+    primaryContainer = androidx.compose.ui.graphics.Color(0xFF305B2F),
+    onPrimaryContainer = androidx.compose.ui.graphics.Color(0xFFDDF3D8),
     secondary = Secondary,
-    background = androidx.compose.ui.graphics.Color(0xFF101610),
-    surface = androidx.compose.ui.graphics.Color(0xFF161D16),
-    surfaceVariant = androidx.compose.ui.graphics.Color(0xFF222B22),
+    background = androidx.compose.ui.graphics.Color(0xFF111712),
+    surface = androidx.compose.ui.graphics.Color(0xFF171F17),
+    surfaceVariant = androidx.compose.ui.graphics.Color(0xFF232D22),
 )
 
 @Composable
 fun EinkaufszettelTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit,
 ) {
     val colorScheme = when {
