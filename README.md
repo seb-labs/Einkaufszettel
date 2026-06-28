@@ -17,12 +17,12 @@ Die App ist bewusst ruhig, kompakt und alltagstauglich gehalten:
 - Demo-Daten mit zwei echten Wochenlisten zum direkten Ausprobieren
 - falls du noch eine alte leere App-Datenbank hast, wird sie beim Start automatisch durch die Demo ersetzt
 - im Menü kannst du die Demo-Daten jederzeit manuell laden
-- Artikel mit Menge und optionaler Kategorie
+- Artikel mit Menge und optionaler Kategorie, kompakt dargestellt
 - Artikel abhaken, bearbeiten und löschen
 - erledigte Artikel unten anzeigen oder ausblenden
 - erledigte Artikel gesammelt entfernen
 - häufige Artikel als Vorschläge in den Dialogen
-- helles und dunkles Material-3-Design
+- helles und dunkles Material-3-Design mit Schalter in der App
 
 ## So sieht die App aus
 
@@ -54,7 +54,7 @@ Deine Daten bleiben lokal auf dem Gerät. Die App braucht keine besonderen Berec
 
 - Kernfunktionen sind implementiert
 - Debug-Build und JVM-Tests wurden erfolgreich geprüft
-- grün-natürliches Farbschema und passendes Launcher-Icon sind gesetzt
+- grün-natürliches Farbschema, passendes Launcher-Icon und kompaktere Listenansicht sind gesetzt
 - Demo-Daten mit zwei Wochenlisten sind eingebaut und per Menü neu ladbar
 
 ## In Android Studio öffnen

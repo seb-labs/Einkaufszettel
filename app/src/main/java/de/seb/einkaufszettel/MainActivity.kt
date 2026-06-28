@@ -21,12 +21,14 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun EinkaufszettelApp(viewModel: ShoppingViewModel = viewModel()) {
-    EinkaufszettelTheme {
+    val darkTheme = viewModel.state.darkThemeEnabled ?: false
+    EinkaufszettelTheme(darkTheme = darkTheme) {
         Surface(modifier = Modifier.fillMaxSize()) {
             ShoppingScreen(
                 state = viewModel.state,
                 onSelectList = viewModel::selectList,
                 onSetCheckedVisibility = viewModel::setCheckedVisibility,
+                onSetDarkThemeEnabled = viewModel::setDarkThemeEnabled,
                 onAddList = viewModel::addList,
                 onRenameList = viewModel::renameSelectedList,
                 onDeleteList = viewModel::deleteSelectedList,

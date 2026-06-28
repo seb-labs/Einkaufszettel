@@ -53,6 +53,7 @@ data class ShoppingAppState(
     val frequentItems: List<FrequentItem> = emptyList(),
     val selectedListId: Long? = null,
     val checkedVisibility: CheckedVisibility = CheckedVisibility.END,
+    val darkThemeEnabled: Boolean? = null,
 ) {
     val selectedList: ShoppingList? get() = lists.firstOrNull { it.id == selectedListId }
     val selectedListName: String get() = selectedList?.name.orEmpty()
@@ -87,6 +88,7 @@ data class ShoppingData(
     val frequentItems: List<FrequentItem>,
     val selectedListId: Long?,
     val checkedVisibility: CheckedVisibility,
+    val darkThemeEnabled: Boolean? = null,
 )
 
 fun createDefaultData(now: Long): ShoppingData {
@@ -240,6 +242,7 @@ fun createDefaultData(now: Long): ShoppingData {
         ),
         selectedListId = week1.id,
         checkedVisibility = CheckedVisibility.END,
+        darkThemeEnabled = null,
     )
 }
 
@@ -249,6 +252,7 @@ fun ShoppingData.asState(): ShoppingAppState = ShoppingAppState(
     frequentItems = frequentItems,
     selectedListId = selectedListId,
     checkedVisibility = checkedVisibility,
+    darkThemeEnabled = darkThemeEnabled,
 )
 
 fun String.cleanedText(): String = trim().replace(Regex("\\s+"), " ")

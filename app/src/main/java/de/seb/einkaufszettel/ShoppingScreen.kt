@@ -75,6 +75,7 @@ fun ShoppingScreen(
     state: ShoppingAppState,
     onSelectList: (Long) -> Unit,
     onSetCheckedVisibility: (CheckedVisibility) -> Unit,
+    onSetDarkThemeEnabled: (Boolean) -> Unit,
     onAddList: (String) -> Unit,
     onRenameList: (String) -> Unit,
     onDeleteList: () -> Unit,
@@ -216,6 +217,10 @@ fun ShoppingScreen(
             ListSummaryCard(
                 state = state,
                 onClick = { showListMenu = true },
+            )
+            ThemeToggleCard(
+                darkTheme = state.darkThemeEnabled == true,
+                onToggle = onSetDarkThemeEnabled,
             )
             DropdownMenu(expanded = showListMenu, onDismissRequest = { showListMenu = false }) {
                 state.lists.forEach { list ->
@@ -511,8 +516,8 @@ private fun OpenItemList(
     LazyColumn(
         state = listState,
         modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(10.dp),
-        contentPadding = PaddingValues(bottom = 4.dp),
+        verticalArrangement = Arrangement.spacedBy(6.dp),
+        contentPadding = PaddingValues(bottom = 2.dp),
     ) {
         itemsIndexed(items, key = { _, item -> item.id }) { index, item ->
             val dragging = draggingItemId == item.id
@@ -601,7 +606,7 @@ private fun ShoppingItemCard(
                 translationY = dragOffsetY.toFloat()
                 shadowElevation = elevation
             },
-        shape = RoundedCornerShape(20.dp),
+        shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
             containerColor = when {
                 checked -> MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.7f)
@@ -610,19 +615,19 @@ private fun ShoppingItemCard(
         ),
     ) {
         Row(
-            modifier = Modifier.padding(horizontal = 12.dp, vertical = 10.dp),
+            modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Checkbox(checked = item.isChecked, onCheckedChange = { onToggle(item.id) })
-            Spacer(modifier = Modifier.width(4.dp))
-            Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
+            Spacer(modifier = Modifier.width(3.dp))
+            Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(1.dp)) {
                 Text(
                     text = item.name,
-                    style = MaterialTheme.typography.bodyMedium.copy(
-                        fontWeight = if (item.isChecked) FontWeight.Normal else FontWeight.Medium,
+                    style = MaterialTheme.typography.bodySmall.copy(
+                        fontWeight = if (item.isChecked) FontWeight.Normal else FontWeight.SemiBold,
                         color = if (item.isChecked) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.onSurface,
                     ),
-                    maxLines = 2,
+                    maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
                 if (item.quantity.isNotBlank() || item.category.isNotBlank()) {
@@ -631,7 +636,7 @@ private fun ShoppingItemCard(
                             item.quantity.takeIf { it.isNotBlank() },
                             item.category.takeIf { it.isNotBlank() },
                         ).joinToString(" · "),
-                        style = MaterialTheme.typography.bodySmall,
+                        style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
@@ -641,7 +646,7 @@ private fun ShoppingItemCard(
             if (showDragHandle) {
                 Box(
                     modifier = Modifier
-                        .size(32.dp)
+                        .size(28.dp)
                         .clip(RoundedCornerShape(10.dp))
                         .background(MaterialTheme.colorScheme.surfaceVariant)
                         .pointerInput(item.id) {
@@ -660,12 +665,42 @@ private fun ShoppingItemCard(
                 }
                 Spacer(modifier = Modifier.width(2.dp))
             }
-            IconButton(onClick = onEdit, modifier = Modifier.size(32.dp)) {
-                Icon(Icons.Default.Edit, contentDescription = "Bearbeiten", modifier = Modifier.size(18.dp))
+            IconButton(onClick = onEdit, modifier = Modifier.size(28.dp)) {
+                Icon(Icons.Default.Edit, contentDescription = "Bearbeiten", modifier = Modifier.size(16.dp))
             }
-            IconButton(onClick = { onDelete(item.id) }, modifier = Modifier.size(32.dp)) {
-                Icon(Icons.Default.Delete, contentDescription = "Löschen", modifier = Modifier.size(18.dp))
+            IconButton(onClick = { onDelete(item.id) }, modifier = Modifier.size(28.dp)) {
+                Icon(Icons.Default.Delete, contentDescription = "Löschen", modifier = Modifier.size(16.dp))
             }
+        }
+    }
+}
+
+@Composable
+private fun ThemeToggleCard(
+    darkTheme: Boolean,
+    onToggle: (Boolean) -> Unit,
+) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(18.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.55f)),
+    ) {
+        Row(
+            modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Column(modifier = Modifier.weight(1f)) {
+                Text("Dunkles Design", style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Medium)
+                Text(
+                    text = if (darkTheme) "Ein" else "Aus",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+            androidx.compose.material3.Switch(
+                checked = darkTheme,
+                onCheckedChange = onToggle,
+            )
         }
     }
 }
@@ -679,13 +714,13 @@ private fun EmptyStateCard(
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(22.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f)),
+        shape = RoundedCornerShape(18.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.55f)),
     ) {
         Column(
-            modifier = Modifier.padding(20.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalAlignment = Alignment.Start,
         ) {
             Icon(Icons.Default.CheckCircle, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
             Text(title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)

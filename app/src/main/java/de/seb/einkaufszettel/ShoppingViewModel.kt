@@ -1,6 +1,7 @@
 package de.seb.einkaufszettel
 
 import android.app.Application
+import android.content.res.Configuration
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -10,9 +11,18 @@ import java.util.UUID
 
 class ShoppingViewModel(application: Application) : AndroidViewModel(application) {
     private val store = ShoppingStore(File(application.filesDir, STORE_FILE_NAME))
+    private val systemDarkTheme =
+        (application.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
 
     var state by mutableStateOf(store.load().asState())
         private set
+
+    init {
+        if (state.darkThemeEnabled == null) {
+            state = state.copy(darkThemeEnabled = systemDarkTheme)
+            persist(state)
+        }
+    }
 
     fun selectList(listId: Long) {
         if (state.lists.any { it.id == listId }) {
@@ -22,6 +32,10 @@ class ShoppingViewModel(application: Application) : AndroidViewModel(application
 
     fun setCheckedVisibility(visibility: CheckedVisibility) {
         update { copy(checkedVisibility = visibility) }
+    }
+
+    fun setDarkThemeEnabled(enabled: Boolean) {
+        update { copy(darkThemeEnabled = enabled) }
     }
 
     fun addList(name: String) {
@@ -150,9 +164,11 @@ class ShoppingViewModel(application: Application) : AndroidViewModel(application
     }
 
     fun loadDemoData() {
-        val demo = createDefaultData(currentTimestamp())
-        state = demo.asState()
-        persist(demo.asState())
+        val demo = createDefaultData(currentTimestamp()).asState().copy(
+            darkThemeEnabled = state.darkThemeEnabled ?: systemDarkTheme,
+        )
+        state = demo
+        persist(demo)
     }
 
     fun moveOpenItem(fromIndex: Int, toIndex: Int) {
@@ -216,6 +232,7 @@ class ShoppingViewModel(application: Application) : AndroidViewModel(application
                     frequentItems = state.frequentItems,
                     selectedListId = state.selectedListId,
                     checkedVisibility = state.checkedVisibility,
+                    darkThemeEnabled = state.darkThemeEnabled,
                 ),
             )
         }
