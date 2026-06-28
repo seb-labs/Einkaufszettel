@@ -61,6 +61,8 @@ Deine Daten bleiben lokal auf dem Gerät. Die App braucht keine besonderen Berec
 ./gradlew assembleDebug
 ```
 
+GitHub Releases werden automatisch aus Tags wie `v1.0.0` gebaut und enthalten die APK zum Download.
+
 ## Projektstatus
 
 - Kernfunktionen sind implementiert
