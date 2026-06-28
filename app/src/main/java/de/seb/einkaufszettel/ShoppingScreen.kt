@@ -509,6 +509,11 @@ private fun SectionHeader(
     }
 }
 
+private sealed interface OpenRow {
+    data class Header(val category: String, val count: Int) : OpenRow
+    data class Item(val item: ShoppingItem, val openIndex: Int) : OpenRow
+}
+
 @Composable
 private fun OpenItemList(
     items: List<ShoppingItem>,
@@ -519,13 +524,26 @@ private fun OpenItemList(
     onDeleteItem: (Long) -> Unit,
 ) {
     var draggingItemId by remember { mutableStateOf<Long?>(null) }
-    var draggingIndex by remember { mutableStateOf<Int?>(null) }
+    var draggingRowIndex by remember { mutableStateOf<Int?>(null) }
     var draggedDistance by remember { mutableFloatStateOf(0f) }
 
-    LaunchedEffect(items) {
+    val rows = remember(items) {
+        buildList {
+            var openIndex = 0
+            items.groupBy { it.categoryDisplayName() }.forEach { (category, groupedItems) ->
+                add(OpenRow.Header(category, groupedItems.size))
+                groupedItems.forEach { item ->
+                    add(OpenRow.Item(item = item, openIndex = openIndex++))
+                }
+            }
+        }
+    }
+
+    LaunchedEffect(items, rows) {
         if (draggingItemId != null) {
             val current = draggingItemId
-            draggingIndex = items.indexOfFirst { it.id == current }.takeIf { it >= 0 }
+            draggingRowIndex = rows.indexOfFirst { row -> row is OpenRow.Item && row.item.id == current }
+                .takeIf { it >= 0 }
         }
     }
 
@@ -535,40 +553,56 @@ private fun OpenItemList(
         verticalArrangement = Arrangement.spacedBy(6.dp),
         contentPadding = PaddingValues(bottom = 2.dp),
     ) {
-        itemsIndexed(items, key = { _, item -> item.id }) { index, item ->
-            val dragging = draggingItemId == item.id
-            ShoppingItemCard(
-                item = item,
-                checked = false,
-                showDragHandle = true,
-                isDragging = dragging,
-                dragOffsetY = if (dragging) draggedDistance.roundToInt() else 0,
-                onToggle = onToggleItem,
-                onEdit = { onEditItem(item) },
-                onDelete = onDeleteItem,
-                onDragStart = {
-                    draggingItemId = item.id
-                    draggingIndex = index
-                    draggedDistance = 0f
-                },
-                onDrag = { delta ->
-                    val currentIndex = draggingIndex ?: return@ShoppingItemCard
-                    draggedDistance += delta
-                    val draggedInfo = listState.layoutInfo.visibleItemsInfo.firstOrNull { it.index == currentIndex } ?: return@ShoppingItemCard
-                    val draggedCenter = draggedInfo.offset + draggedInfo.size / 2 + draggedDistance
-                    val target = listState.layoutInfo.visibleItemsInfo.firstOrNull { info ->
-                        info.index != currentIndex && draggedCenter > info.offset && draggedCenter < info.offset + info.size
-                    } ?: return@ShoppingItemCard
-                    onMoveOpenItem(currentIndex, target.index)
-                    draggingIndex = target.index
-                    draggedDistance = 0f
-                },
-                onDragEnd = {
-                    draggingItemId = null
-                    draggingIndex = null
-                    draggedDistance = 0f
-                },
-            )
+        itemsIndexed(rows, key = { index, row ->
+            when (row) {
+                is OpenRow.Header -> "header-${row.category}-$index"
+                is OpenRow.Item -> row.item.id
+            }
+        }) { rowIndex, row ->
+            when (row) {
+                is OpenRow.Header -> SectionHeader(
+                    title = row.category,
+                    subtitle = "${row.count} Artikel",
+                )
+                is OpenRow.Item -> {
+                    val dragging = draggingItemId == row.item.id
+                    ShoppingItemCard(
+                        item = row.item,
+                        checked = false,
+                        showDragHandle = true,
+                        isDragging = dragging,
+                        dragOffsetY = if (dragging) draggedDistance.roundToInt() else 0,
+                        onToggle = onToggleItem,
+                        onEdit = { onEditItem(row.item) },
+                        onDelete = onDeleteItem,
+                        onDragStart = {
+                            draggingItemId = row.item.id
+                            draggingRowIndex = rowIndex
+                            draggedDistance = 0f
+                        },
+                        onDrag = { delta ->
+                            val currentRowIndex = draggingRowIndex ?: return@ShoppingItemCard
+                            val currentRow = rows.getOrNull(currentRowIndex) as? OpenRow.Item ?: return@ShoppingItemCard
+                            draggedDistance += delta
+                            val draggedInfo = listState.layoutInfo.visibleItemsInfo.firstOrNull { it.index == currentRowIndex }
+                                ?: return@ShoppingItemCard
+                            val draggedCenter = draggedInfo.offset + draggedInfo.size / 2 + draggedDistance
+                            val targetInfo = listState.layoutInfo.visibleItemsInfo.firstOrNull { info ->
+                                info.index != currentRowIndex && draggedCenter > info.offset && draggedCenter < info.offset + info.size
+                            } ?: return@ShoppingItemCard
+                            val targetRow = rows.getOrNull(targetInfo.index) as? OpenRow.Item ?: return@ShoppingItemCard
+                            onMoveOpenItem(currentRow.openIndex, targetRow.openIndex)
+                            draggingRowIndex = targetInfo.index
+                            draggedDistance = 0f
+                        },
+                        onDragEnd = {
+                            draggingItemId = null
+                            draggingRowIndex = null
+                            draggedDistance = 0f
+                        },
+                    )
+                }
+            }
         }
     }
 }
@@ -650,7 +684,7 @@ private fun ShoppingItemCard(
                     Text(
                         text = listOfNotNull(
                             item.quantity.takeIf { it.isNotBlank() },
-                            item.category.takeIf { it.isNotBlank() },
+                            item.categoryDisplayName().takeIf { it.isNotBlank() },
                         ).joinToString(" · "),
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,

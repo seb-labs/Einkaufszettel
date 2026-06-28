@@ -62,6 +62,7 @@ data class ShoppingAppState(
     val currentItems: List<ShoppingItem>
         get() = items.filter { it.listId == selectedListId }.sortedWith(
             compareBy<ShoppingItem> { it.isChecked }
+                .thenBy { it.categoryDisplayName() }
                 .thenBy { it.sortOrder }
                 .thenBy { it.createdAt },
         )
@@ -263,6 +264,8 @@ fun ShoppingData.asState(): ShoppingAppState = ShoppingAppState(
     checkedVisibility = checkedVisibility,
     darkThemeEnabled = darkThemeEnabled,
 )
+
+fun ShoppingItem.categoryDisplayName(): String = category.cleanedText().ifBlank { DEFAULT_CATEGORY }
 
 fun String.cleanedText(): String = trim().replace(Regex("\\s+"), " ")
 

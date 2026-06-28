@@ -17,7 +17,7 @@ Die App ist bewusst ruhig, kompakt und alltagstauglich gehalten:
 - Demo-Daten mit zwei echten Wochenlisten zum direkten Ausprobieren
 - falls du noch eine alte leere App-Datenbank hast, wird sie beim Start automatisch durch die Demo ersetzt
 - im Menü kannst du die Demo-Daten jederzeit manuell laden
-- Artikel mit Menge und optionaler Kategorie, kompakt dargestellt; eigene Kategorien werden gelernt und später wieder angeboten
+- Artikel mit Menge und optionaler Kategorie, kompakt dargestellt; eigene Kategorien werden gelernt und später wieder angeboten; die offene Liste wird automatisch nach Kategorie gruppiert
 - Artikel abhaken, bearbeiten und löschen
 - erledigte Artikel unten anzeigen oder ausblenden
 - erledigte Artikel gesammelt entfernen
