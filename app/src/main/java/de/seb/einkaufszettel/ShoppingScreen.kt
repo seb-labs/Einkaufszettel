@@ -893,7 +893,11 @@ private fun ShoppingItemDialog(
                                         onClick = { showMoreSuggestions = !showMoreSuggestions },
                                         label = {
                                             Text(
-                                                if (showMoreSuggestions) "Weniger" else "Mehr",
+                                                if (showMoreSuggestions) {
+                                                    "Weniger"
+                                                } else {
+                                                    "Mehr +${suggestions.size - 3}"
+                                                },
                                                 maxLines = 1,
                                                 overflow = TextOverflow.Ellipsis,
                                             )
