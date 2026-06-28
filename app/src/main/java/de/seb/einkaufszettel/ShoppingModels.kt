@@ -51,6 +51,7 @@ data class ShoppingAppState(
     val lists: List<ShoppingList> = emptyList(),
     val items: List<ShoppingItem> = emptyList(),
     val frequentItems: List<FrequentItem> = emptyList(),
+    val customCategories: List<String> = emptyList(),
     val selectedListId: Long? = null,
     val checkedVisibility: CheckedVisibility = CheckedVisibility.END,
     val darkThemeEnabled: Boolean? = null,
@@ -75,6 +76,12 @@ data class ShoppingAppState(
     val openCount: Int get() = openItems.size
     val checkedCount: Int get() = checkedItems.size
 
+    val categoryOptions: List<String>
+        get() = (DEFAULT_CATEGORIES + customCategories + items.map { it.category } + frequentItems.map { it.category })
+            .map { it.cleanedText() }
+            .filter { it.isNotBlank() }
+            .distinctBy { it.lowercase() }
+
     val suggestions: List<FrequentItem>
         get() = frequentItems.sortedWith(
             compareByDescending<FrequentItem> { it.useCount }
@@ -86,6 +93,7 @@ data class ShoppingData(
     val lists: List<ShoppingList>,
     val items: List<ShoppingItem>,
     val frequentItems: List<FrequentItem>,
+    val customCategories: List<String>,
     val selectedListId: Long?,
     val checkedVisibility: CheckedVisibility,
     val darkThemeEnabled: Boolean? = null,
@@ -240,6 +248,7 @@ fun createDefaultData(now: Long): ShoppingData {
             FrequentItem("Bananen", quantity = "1 Bund", category = "Obst & Gemüse", useCount = 2),
             FrequentItem("Kaffee", quantity = "1 Packung", category = "Vorrat", useCount = 2),
         ),
+        customCategories = listOf("Bio", "Fleisch & Fisch"),
         selectedListId = week1.id,
         checkedVisibility = CheckedVisibility.END,
         darkThemeEnabled = null,

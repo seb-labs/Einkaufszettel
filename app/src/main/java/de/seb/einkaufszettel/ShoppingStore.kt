@@ -7,9 +7,8 @@ import java.io.File
 
 class ShoppingStore(private val file: File) {
     fun load(): ShoppingData = runCatching {
-        if (!file.exists()) {
-            return createDefaultData(currentTimestamp())
-        }
+        if (!file.exists()) return createDefaultData(currentTimestamp())
+
         val raw = file.readText()
         val parsed = when (val value = JSONTokener(raw).nextValue()) {
             is JSONObject -> value
@@ -19,6 +18,7 @@ class ShoppingStore(private val file: File) {
         val lists = parsed.optJSONArray(KEY_LISTS)?.toShoppingLists().orEmpty()
         val items = parsed.optJSONArray(KEY_ITEMS)?.toShoppingItems().orEmpty()
         val frequentItems = parsed.optJSONArray(KEY_FREQUENT)?.toFrequentItems().orEmpty()
+        val customCategories = parsed.optJSONArray(KEY_CUSTOM_CATEGORIES)?.toCustomCategories().orEmpty()
         val selectedListId = parsed.optLong(KEY_SELECTED_LIST_ID, -1L).takeIf { it > 0 }
         val visibility = runCatching {
             CheckedVisibility.valueOf(parsed.optString(KEY_CHECKED_VISIBILITY, CheckedVisibility.END.name))
@@ -29,6 +29,7 @@ class ShoppingStore(private val file: File) {
                 lists = lists,
                 items = items,
                 frequentItems = frequentItems,
+                customCategories = customCategories,
                 selectedListId = selectedListId,
                 checkedVisibility = visibility,
             ),
@@ -50,12 +51,14 @@ class ShoppingStore(private val file: File) {
         val validItems = data.items.filter { it.listId in listIds }
         val selectedListId = data.selectedListId?.takeIf { it in listIds } ?: lists.firstOrNull()?.id
             ?: return createDefaultData(now)
+        val categories = data.customCategories.map { it.cleanedText() }.filter { it.isNotBlank() }
 
         return data.copy(
             lists = lists,
             items = validItems,
             selectedListId = selectedListId,
             checkedVisibility = data.checkedVisibility,
+            customCategories = categories,
         )
     }
 
@@ -65,6 +68,7 @@ class ShoppingStore(private val file: File) {
             frequentItems.isEmpty()
 
     private fun ShoppingData.toJson(): JSONObject = JSONObject()
+        .put(KEY_CUSTOM_CATEGORIES, JSONArray().also { arr -> customCategories.forEach { arr.put(it) } })
         .put(KEY_SELECTED_LIST_ID, selectedListId ?: JSONObject.NULL)
         .put(KEY_CHECKED_VISIBILITY, checkedVisibility.name)
         .put(KEY_LISTS, JSONArray().also { arr -> lists.forEach { arr.put(it.toJson()) } })
@@ -94,6 +98,12 @@ class ShoppingStore(private val file: File) {
         .put("quantity", quantity)
         .put("category", category)
         .put("useCount", useCount)
+
+    private fun JSONArray.toCustomCategories(): List<String> = buildList {
+        for (index in 0 until length()) {
+            add(getString(index).cleanedText())
+        }
+    }.filter { it.isNotBlank() }
 
     private fun JSONArray.toShoppingLists(): List<ShoppingList> = buildList {
         for (index in 0 until length()) {
@@ -147,6 +157,7 @@ class ShoppingStore(private val file: File) {
         const val KEY_LISTS = "lists"
         const val KEY_ITEMS = "items"
         const val KEY_FREQUENT = "frequentItems"
+        const val KEY_CUSTOM_CATEGORIES = "customCategories"
         const val KEY_SELECTED_LIST_ID = "selectedListId"
         const val KEY_CHECKED_VISIBILITY = "checkedVisibility"
     }

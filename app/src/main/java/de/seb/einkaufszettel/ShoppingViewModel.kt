@@ -114,6 +114,7 @@ class ShoppingViewModel(application: Application) : AndroidViewModel(application
             copy(
                 items = items + newItem,
                 frequentItems = updateFrequentItems(frequentItems, newItem),
+                customCategories = updateCustomCategories(customCategories, newItem.category),
             )
         }
     }
@@ -134,9 +135,11 @@ class ShoppingViewModel(application: Application) : AndroidViewModel(application
                     item
                 }
             }
+            val updatedItem = updatedItems.firstOrNull { it.id == itemId }
             copy(
                 items = updatedItems,
-                frequentItems = updateFrequentItems(frequentItems, updatedItems.firstOrNull { it.id == itemId }),
+                frequentItems = updateFrequentItems(frequentItems, updatedItem),
+                customCategories = updateCustomCategories(customCategories, updatedItem?.category),
             )
         }
     }
@@ -230,6 +233,7 @@ class ShoppingViewModel(application: Application) : AndroidViewModel(application
                     lists = state.lists,
                     items = state.items,
                     frequentItems = state.frequentItems,
+                    customCategories = state.customCategories,
                     selectedListId = state.selectedListId,
                     checkedVisibility = state.checkedVisibility,
                     darkThemeEnabled = state.darkThemeEnabled,
@@ -263,6 +267,13 @@ class ShoppingViewModel(application: Application) : AndroidViewModel(application
                 }
             }
         }
+    }
+
+    private fun updateCustomCategories(existing: List<String>, category: String?): List<String> {
+        val cleaned = category?.cleanedText().orEmpty()
+        if (cleaned.isBlank()) return existing
+        if (DEFAULT_CATEGORIES.any { it.equals(cleaned, ignoreCase = true) }) return existing
+        return if (existing.any { it.equals(cleaned, ignoreCase = true) }) existing else existing + cleaned
     }
 
     private fun createFallbackList(): ShoppingList {

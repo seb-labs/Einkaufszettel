@@ -402,6 +402,7 @@ fun ShoppingScreen(
             title = "Artikel hinzufügen",
             confirmLabel = "Hinzufügen",
             suggestions = state.suggestions,
+            categoryOptions = state.categoryOptions,
             onDismiss = { showAddItemDialog = false },
             onConfirm = { name, quantity, category ->
                 onAddItem(name, quantity, category)
@@ -418,6 +419,7 @@ fun ShoppingScreen(
             initialQuantity = item.quantity,
             initialCategory = item.category,
             suggestions = state.suggestions,
+            categoryOptions = state.categoryOptions,
             onDismiss = { editItem = null },
             onConfirm = { name, quantity, category ->
                 onUpdateItem(item.id, name, quantity, category)
@@ -786,6 +788,7 @@ private fun ShoppingItemDialog(
     onDismiss: () -> Unit,
     onConfirm: (String, String, String) -> Unit,
     suggestions: List<FrequentItem>,
+    categoryOptions: List<String>,
     initialName: String = "",
     initialQuantity: String = "",
     initialCategory: String = "",
@@ -829,7 +832,7 @@ private fun ShoppingItemDialog(
                     )
                     // The text field itself stays editable; the dropdown below offers fast picks.
                 }
-                if (DEFAULT_CATEGORIES.isNotEmpty()) {
+                if (categoryOptions.isNotEmpty()) {
                     Text(
                         text = "Vorschläge",
                         style = MaterialTheme.typography.labelMedium,
@@ -856,7 +859,7 @@ private fun ShoppingItemDialog(
                                 Text(if (category.isBlank()) "Kategorie wählen" else "Kategorie ändern")
                             }
                             DropdownMenu(expanded = categoryMenuOpen, onDismissRequest = { categoryMenuOpen = false }) {
-                                DEFAULT_CATEGORIES.forEach { item ->
+                                categoryOptions.forEach { item ->
                                     DropdownMenuItem(
                                         text = { Text(item) },
                                         onClick = {
