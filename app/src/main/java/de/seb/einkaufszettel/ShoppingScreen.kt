@@ -84,6 +84,7 @@ fun ShoppingScreen(
     onToggleItem: (Long) -> Unit,
     onDeleteItem: (Long) -> Unit,
     onDeleteSuggestion: (String) -> Unit,
+    onDeleteCategory: (String) -> Unit,
     onClearCheckedItems: () -> Unit,
     onLoadDemoData: () -> Unit,
     onMoveOpenItem: (Int, Int) -> Unit,
@@ -404,7 +405,9 @@ fun ShoppingScreen(
             confirmLabel = "Hinzufügen",
             suggestions = state.suggestions,
             categoryOptions = state.categoryOptions,
+            customCategories = state.customCategories,
             onDeleteSuggestion = onDeleteSuggestion,
+            onDeleteCategory = onDeleteCategory,
             onDismiss = { showAddItemDialog = false },
             onConfirm = { name, quantity, category ->
                 onAddItem(name, quantity, category)
@@ -422,7 +425,9 @@ fun ShoppingScreen(
             initialCategory = item.category,
             suggestions = state.suggestions,
             categoryOptions = state.categoryOptions,
+            customCategories = state.customCategories,
             onDeleteSuggestion = onDeleteSuggestion,
+            onDeleteCategory = onDeleteCategory,
             onDismiss = { editItem = null },
             onConfirm = { name, quantity, category ->
                 onUpdateItem(item.id, name, quantity, category)
@@ -827,7 +832,9 @@ private fun ShoppingItemDialog(
     onConfirm: (String, String, String) -> Unit,
     suggestions: List<FrequentItem>,
     categoryOptions: List<String>,
+    customCategories: List<String>,
     onDeleteSuggestion: (String) -> Unit,
+    onDeleteCategory: (String) -> Unit,
     initialName: String = "",
     initialQuantity: String = "",
     initialCategory: String = "",
@@ -955,8 +962,28 @@ private fun ShoppingItemDialog(
                         }
                         DropdownMenu(expanded = categoryMenuOpen, onDismissRequest = { categoryMenuOpen = false }) {
                             categoryOptions.forEach { item ->
+                                val isCustom = customCategories.any { it.nameKey() == item.nameKey() } && DEFAULT_CATEGORIES.none { it.nameKey() == item.nameKey() }
                                 DropdownMenuItem(
                                     text = { Text(item) },
+                                    trailingIcon = {
+                                        if (isCustom) {
+                                            IconButton(
+                                                onClick = {
+                                                    onDeleteCategory(item)
+                                                    if (category.nameKey() == item.nameKey()) {
+                                                        category = ""
+                                                    }
+                                                },
+                                                modifier = Modifier.size(28.dp),
+                                            ) {
+                                                Icon(
+                                                    Icons.Default.Delete,
+                                                    contentDescription = "Kategorie entfernen",
+                                                    modifier = Modifier.size(16.dp),
+                                                )
+                                            }
+                                        }
+                                    },
                                     onClick = {
                                         category = item
                                         categoryMenuOpen = false

@@ -37,6 +37,7 @@ fun EinkaufszettelApp(viewModel: ShoppingViewModel = viewModel()) {
                 onToggleItem = viewModel::toggleItem,
                 onDeleteItem = viewModel::deleteItem,
                 onDeleteSuggestion = viewModel::deleteSuggestion,
+                onDeleteCategory = viewModel::deleteCustomCategory,
                 onClearCheckedItems = viewModel::clearCheckedItems,
                 onLoadDemoData = viewModel::loadDemoData,
                 onMoveOpenItem = viewModel::moveOpenItem,

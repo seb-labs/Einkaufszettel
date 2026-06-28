@@ -167,6 +167,22 @@ class ShoppingViewModel(application: Application) : AndroidViewModel(application
         }
     }
 
+    fun deleteCustomCategory(category: String) {
+        val key = category.cleanedText()
+        if (key.isBlank() || DEFAULT_CATEGORIES.any { it.nameKey() == key }) return
+        update {
+            copy(
+                customCategories = customCategories.filterNot { it.nameKey() == key },
+                items = items.map { item ->
+                    if (item.category.nameKey() == key) item.copy(category = DEFAULT_CATEGORY, updatedAt = currentTimestamp()) else item
+                },
+                frequentItems = frequentItems.map { item ->
+                    if (item.category.nameKey() == key) item.copy(category = DEFAULT_CATEGORY) else item
+                },
+            )
+        }
+    }
+
     fun clearCheckedItems() {
         update {
             copy(items = items.filterNot { it.isChecked })
