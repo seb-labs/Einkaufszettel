@@ -22,7 +22,7 @@ Die App ist bewusst ruhig, kompakt und alltagstauglich gehalten:
 - Artikel abhaken, bearbeiten und löschen
 - erledigte Artikel unten anzeigen oder ausblenden
 - erledigte Artikel gesammelt entfernen
-- häufige Artikel als Vorschläge in den Dialogen
+- häufige Artikel als Vorschläge in den Dialogen; überzählige Vorschläge lassen sich aus dem "Mehr"-Bereich entfernen
 - helles und dunkles Material-3-Design mit Umschaltung im Drei-Punkte-Menü
 
 ## So sieht die App aus
@@ -41,6 +41,8 @@ Die App ist bewusst ruhig, kompakt und alltagstauglich gehalten:
 <p><img src="docs/screenshots/einkaufszettel-menu-light.png" width="360" alt="Menü geöffnet" /></p>
 <p><img src="docs/screenshots/einkaufszettel-dark-list.png" width="360" alt="Listenansicht dunkel" /></p>
 
+
+## Technik
 
 - Kotlin
 - Jetpack Compose

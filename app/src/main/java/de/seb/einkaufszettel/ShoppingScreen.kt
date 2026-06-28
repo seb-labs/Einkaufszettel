@@ -83,6 +83,7 @@ fun ShoppingScreen(
     onUpdateItem: (Long, String, String, String) -> Unit,
     onToggleItem: (Long) -> Unit,
     onDeleteItem: (Long) -> Unit,
+    onDeleteSuggestion: (String) -> Unit,
     onClearCheckedItems: () -> Unit,
     onLoadDemoData: () -> Unit,
     onMoveOpenItem: (Int, Int) -> Unit,
@@ -403,6 +404,7 @@ fun ShoppingScreen(
             confirmLabel = "Hinzufügen",
             suggestions = state.suggestions,
             categoryOptions = state.categoryOptions,
+            onDeleteSuggestion = onDeleteSuggestion,
             onDismiss = { showAddItemDialog = false },
             onConfirm = { name, quantity, category ->
                 onAddItem(name, quantity, category)
@@ -420,6 +422,7 @@ fun ShoppingScreen(
             initialCategory = item.category,
             suggestions = state.suggestions,
             categoryOptions = state.categoryOptions,
+            onDeleteSuggestion = onDeleteSuggestion,
             onDismiss = { editItem = null },
             onConfirm = { name, quantity, category ->
                 onUpdateItem(item.id, name, quantity, category)
@@ -824,6 +827,7 @@ private fun ShoppingItemDialog(
     onConfirm: (String, String, String) -> Unit,
     suggestions: List<FrequentItem>,
     categoryOptions: List<String>,
+    onDeleteSuggestion: (String) -> Unit,
     initialName: String = "",
     initialQuantity: String = "",
     initialCategory: String = "",
@@ -901,6 +905,48 @@ private fun ShoppingItemDialog(
                                     )
                                 },
                             )
+                        }
+                    }
+                    if (showMoreSuggestions && suggestions.size > 3) {
+                        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                            Text(
+                                text = "Weitere Vorschläge",
+                                style = MaterialTheme.typography.labelMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
+                            suggestions.drop(3).forEach { suggestion ->
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                ) {
+                                    SuggestionChip(
+                                        onClick = {
+                                            name = suggestion.name
+                                            quantity = suggestion.quantity
+                                            category = suggestion.category
+                                            error = null
+                                        },
+                                        label = {
+                                            Text(
+                                                suggestion.name,
+                                                maxLines = 1,
+                                                overflow = TextOverflow.Ellipsis,
+                                            )
+                                        },
+                                    )
+                                    Spacer(modifier = Modifier.width(4.dp))
+                                    IconButton(
+                                        onClick = { onDeleteSuggestion(suggestion.name) },
+                                        modifier = Modifier.size(28.dp),
+                                    ) {
+                                        Icon(
+                                            Icons.Default.Delete,
+                                            contentDescription = "Vorschlag entfernen",
+                                            modifier = Modifier.size(16.dp),
+                                        )
+                                    }
+                                }
+                            }
                         }
                     }
                     Box {

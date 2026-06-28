@@ -160,6 +160,13 @@ class ShoppingViewModel(application: Application) : AndroidViewModel(application
         }
     }
 
+    fun deleteSuggestion(name: String) {
+        val key = name.nameKey()
+        update {
+            copy(frequentItems = frequentItems.filterNot { it.name.nameKey() == key })
+        }
+    }
+
     fun clearCheckedItems() {
         update {
             copy(items = items.filterNot { it.isChecked })
