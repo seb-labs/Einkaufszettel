@@ -16,6 +16,8 @@ class ShoppingModelsTest {
         assertEquals(1, data.lists.size)
         assertEquals("Wocheneinkauf", data.lists.first().name)
         assertEquals(data.lists.first().id, data.selectedListId)
+        assertTrue(data.items.isNotEmpty())
+        assertTrue(data.frequentItems.isNotEmpty())
     }
 
     @Test

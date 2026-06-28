@@ -29,12 +29,13 @@ Eine schlichte, lokale Android-App für deinen normalen Wocheneinkauf.
 - lokale JSON-Persistenz im internen App-Speicher
 
 ## Speicherlösung
-Die App speichert ihre Daten lokal in einer JSON-Datei im internen Speicher des Geräts. Es gibt keine Cloud-Anbindung und keine Anmeldung.
+Deine Daten werden lokal in einer JSON-Datei im internen Speicher des Geräts gespeichert. Es gibt keine Cloud-Anbindung und keine Anmeldung.
 
 ## Datenschutz
-Die App benötigt keine besonderen Berechtigungen und überträgt keine Nutzerdaten an externe Dienste.
+Du brauchst keine besonderen Berechtigungen, und die App überträgt keine Nutzerdaten an externe Dienste.
 
 ## Build
+Führe dafür aus:
 ```bash
 ./gradlew assembleDebug
 ```
@@ -44,6 +45,7 @@ Die App benötigt keine besonderen Berechtigungen und überträgt keine Nutzerda
 - Kernfunktionen implementiert
 - Debug-Build und JVM-Tests erfolgreich geprüft
 - passendes grün-natürliches Farbschema und Launcher-Icon gesetzt
+- Demo-Daten für den ersten Start vorgesehen
 - offene Punkte: optionales Feintuning von UI/Layouts nach realem Emulator- oder Gerätecheck
 
 ## Hinweis für Android Studio
