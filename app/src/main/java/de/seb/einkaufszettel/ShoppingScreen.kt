@@ -99,6 +99,7 @@ fun ShoppingScreen(
     var showClearCheckedConfirm by remember { mutableStateOf(false) }
     var showInfoDialog by remember { mutableStateOf(false) }
     var showLoadDemoConfirm by remember { mutableStateOf(false) }
+    var showCategoryManagerDialog by remember { mutableStateOf(false) }
     var showAddItemDialog by remember { mutableStateOf(false) }
     var editItem by remember { mutableStateOf<ShoppingItem?>(null) }
 
@@ -196,6 +197,14 @@ fun ShoppingScreen(
                             onClick = {
                                 showMenu = false
                                 showLoadDemoConfirm = true
+                            },
+                        )
+                        DropdownMenuItem(
+                            text = { Text("Kategorien verwalten") },
+                            leadingIcon = { Icon(Icons.Default.Edit, contentDescription = null) },
+                            onClick = {
+                                showMenu = false
+                                showCategoryManagerDialog = true
                             },
                         )
                         DropdownMenuItem(
@@ -399,6 +408,14 @@ fun ShoppingScreen(
             dismissButton = {
                 TextButton(onClick = { showLoadDemoConfirm = false }) { Text("Abbrechen") }
             },
+        )
+    }
+
+    if (showCategoryManagerDialog) {
+        CategoryManagerDialog(
+            categories = state.customCategories,
+            onDeleteCategory = onDeleteCategory,
+            onDismiss = { showCategoryManagerDialog = false },
         )
     }
 
@@ -822,6 +839,67 @@ private fun ListEditorDialog(
         },
         dismissButton = {
             TextButton(onClick = onDismiss) { Text("Abbrechen") }
+        },
+    )
+}
+
+@Composable
+private fun CategoryManagerDialog(
+    categories: List<String>,
+    onDeleteCategory: (String) -> Unit,
+    onDismiss: () -> Unit,
+) {
+    val customCategories = remember(categories) {
+        categories.distinctBy { it.nameKey() }.sortedBy { it.lowercase() }
+    }
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("Kategorien verwalten") },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                Text(
+                    text = "Eigene Kategorien kannst du hier wieder entfernen. Standardkategorien bleiben erhalten.",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+                if (customCategories.isEmpty()) {
+                    Text(
+                        text = "Noch keine eigenen Kategorien angelegt.",
+                        style = MaterialTheme.typography.bodyMedium,
+                    )
+                } else {
+                    LazyColumn(
+                        modifier = Modifier.heightIn(max = 360.dp),
+                        verticalArrangement = Arrangement.spacedBy(6.dp),
+                        contentPadding = PaddingValues(vertical = 2.dp),
+                    ) {
+                        itemsIndexed(customCategories, key = { index, item -> "cat-$index-${item.nameKey()}" }) { _, category ->
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically,
+                            ) {
+                                Column(modifier = Modifier.weight(1f)) {
+                                    Text(category, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold)
+                                }
+                                IconButton(
+                                    onClick = { onDeleteCategory(category) },
+                                    modifier = Modifier.size(32.dp),
+                                ) {
+                                    Icon(
+                                        Icons.Default.Delete,
+                                        contentDescription = "Kategorie entfernen",
+                                        modifier = Modifier.size(18.dp),
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = onDismiss) { Text("Schließen") }
         },
     )
 }

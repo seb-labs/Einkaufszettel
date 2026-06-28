@@ -24,6 +24,7 @@ Die App ist bewusst ruhig, kompakt und alltagstauglich gehalten:
 - erledigte Artikel gesammelt entfernen
 - häufige Artikel als Vorschläge in den Dialogen; überzählige Vorschläge lassen sich aus dem "Mehr"-Bereich entfernen
 - helles und dunkles Material-3-Design mit Umschaltung im Drei-Punkte-Menü
+- im Menü gibt es jetzt einen separaten Bereich zum Verwalten angelegter Kategorien
 
 ## So sieht die App aus
 
