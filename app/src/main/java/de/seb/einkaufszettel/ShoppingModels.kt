@@ -87,7 +87,7 @@ data class ShoppingAppState(
         get() = frequentItems.sortedWith(
             compareByDescending<FrequentItem> { it.useCount }
                 .thenBy { it.name.lowercase() },
-        ).take(6)
+        ).take(12)
 }
 
 data class ShoppingData(
