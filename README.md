@@ -1,6 +1,6 @@
 # Einkaufszettel
 
-**Download:** [Aktuelle APK auf GitHub Releases](https://github.com/seb-labs/Einkaufszettel/releases/tag/v1.0.0)
+**Download:** [Neueste APK auf GitHub Releases](https://github.com/seb-labs/Einkaufszettel/releases/latest)
 
 **Einkaufszettel** ist eine schlichte Android-App für deinen normalen Wocheneinkauf. Du kannst mehrere Listen führen, Artikel schnell hinzufügen, beim Einkaufen abhaken und erledigte Positionen gesammelt aufräumen.
 
@@ -64,14 +64,3 @@ Deine Daten bleiben lokal auf dem Gerät. Die App braucht keine besonderen Berec
 ```
 
 GitHub Releases werden automatisch aus Tags wie `v1.0.0` gebaut und enthalten die APK zum Download.
-
-## Projektstatus
-
-- Kernfunktionen sind implementiert
-- Debug-Build und JVM-Tests wurden erfolgreich geprüft
-- grün-natürliches Farbschema, passendes Launcher-Icon und kompaktere Listenansicht sind gesetzt
-- Demo-Daten mit zwei Wochenlisten sind eingebaut und per Menü neu ladbar
-
-## In Android Studio öffnen
-
-Öffne einfach den Ordner `Einkaufszettel` als Projekt. Das ist ein normales Android-Studio-Projekt mit einem App-Modul.
